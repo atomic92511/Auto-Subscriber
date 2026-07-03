@@ -2,8 +2,13 @@ import pyautogui as pg
 import time
 import PIL 
 import cv2
-import tkinter as tk
+import customtkinter as tk
 pg.FAILSAFE = False
+def change_mode():
+    if dark.get() == True:
+        tk.set_appearance_mode("dark")
+    else:
+        tk.set_appearance_mode("light")
 def youtube():
     notify_on = notify.get()
     channel = line_edit.get()
@@ -38,21 +43,25 @@ def youtube():
         pg.typewrite(js_click_script_notify)
     pg.hotkey("return")
     pg.hotkey("command","option","j",interval=0.1)
-root = tk.Tk()
+root = tk.CTk()
 root.title = "Auto Subscriber"
 root.geometry("600x400")
-
-title = tk.Label(root,text="Auto Subscriber",font=("Ariel", 16, "bold"))
-title.pack(pady=(20,10))
-label = tk.Label(root,text="Input a channel name", font = ("Ariel" ,10,"bold"))
+tk.set_appearance_mode("light")
+tk.set_default_color_theme("blue")
+title = tk.CTkLabel(root,text="Auto Subscriber",font=("Ariel", 24, "bold"))
+title.pack(pady=(10,10))
+label = tk.CTkLabel(root,text="Input a channel name", font = ("Ariel" ,13,"bold"))
 label.pack(pady=(10,10))
-line_edit = tk.Entry(root, width=20,borderwidth=5,font=("Ariel",12))
+line_edit = tk.CTkEntry(root, width=200,border_width=5,font=("Ariel",12))
 line_edit.pack()
-button = tk.Button(root,text="Subscribe",borderwidth=5,font=("Ariel", 15, "bold"), command=youtube)
-button.pack()
-label2 = tk.Label(root,text="Customization", font=("Ariel",16, "bold"))
+button = tk.CTkButton(root,text="Subscribe",border_width=5,font=("Ariel", 15, "bold"), command=youtube)
+button.pack(pady=(10,0))
+label2 = tk.CTkLabel(root,text="Customization", font=("Ariel",16, "bold"))
 label2.pack(pady=(30,0))
 notify = tk.BooleanVar()
-notifications = tk.Checkbutton(root,text="Notifications On",variable=notify)
+notifications = tk.CTkCheckBox(root,text="Notifications On",variable=notify)
 notifications.pack()
+dark = tk.BooleanVar()
+dark_mode = tk.CTkCheckBox(root,text="Dark Mode        ",variable=dark,command=change_mode)
+dark_mode.pack(pady=(10,0))
 root.mainloop()
