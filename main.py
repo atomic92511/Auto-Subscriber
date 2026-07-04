@@ -13,54 +13,105 @@ def change_mode():
         tk.set_appearance_mode("light")
 def youtube():
     notify_on = notify.get()
-    channel = line_edit.get()
-    pg.moveTo(0,0)
+    if mutiple_channels.get() == True:
+        channel_list = line_edit.get().split()
+        pg.moveTo(0,0)
 
-    pg.click()
+        pg.click()
 
-    pg.hotkey("command","space", interval=0.1)
+        pg.hotkey("command","space", interval=0.1)
 
-    pg.typewrite("chrome")
+        pg.typewrite("chrome")
 
-    pg.hotkey("return",interval=0.1)
+        pg.hotkey("return",interval=0.1)
+        for i in range(len(channel_list)):
+            pg.hotkey("command", "t", interval=0.1)
+            pyperclip.copy("youtube.com/@" + str(channel_list[i]))
+            pg.hotkey("command", "v")
 
-    pg.hotkey("command", "t", interval=0.1)
-    pyperclip.copy("youtube.com/@" + str(channel))
-    pg.hotkey("command", "v")
-
-    pg.hotkey("return",interval=0.1)
-    pg.hotkey("command", "option", "j", interval=0.1)
-    js_click_script = (
-        "var b=Array.from(document.querySelectorAll('button,span,yt-formatted-string'))"
-        ".find(e=>['Subscribe','Subscribed'].includes(e.textContent.trim()));if(b)b.click();"
-    )
-    js_click_script_notify = (
-    "var s=Array.from(document.querySelectorAll('button,span,yt-formatted-string')).find(e=>['Subscribe','Subscribed'].includes(e.textContent.trim()));if(s){s.click();setTimeout(()=>{var a=Array.from(document.querySelectorAll('ytd-menu-service-item-renderer,tp-yt-paper-item,span')).find(e=>e.textContent.trim()==='All');if(a)a.click();},400);}"
-    )
+            pg.hotkey("return",interval=0.1)
+            pg.hotkey("command", "option", "j", interval=0.1)
+            js_click_script = (
+                "var b=Array.from(document.querySelectorAll('button,span,yt-formatted-string'))"
+                ".find(e=>['Subscribe','Subscribed'].includes(e.textContent.trim()));if(b)b.click();"
+            )
+            js_click_script_notify = (
+            "var s=Array.from(document.querySelectorAll('button,span,yt-formatted-string')).find(e=>['Subscribe','Subscribed'].includes(e.textContent.trim()));if(s){s.click();setTimeout(()=>{var a=Array.from(document.querySelectorAll('ytd-menu-service-item-renderer,tp-yt-paper-item,span')).find(e=>e.textContent.trim()==='All');if(a)a.click();},400);}"
+            )
 
 
-    if notify_on == False:
-        pyperclip.copy(js_click_script)
+            if notify_on == False:
+                pyperclip.copy(js_click_script)
+                pg.hotkey("command", "v")
+            else:
+                pyperclip.copy(js_click_script_notify)
+                pg.hotkey("command", "v")
+            pg.hotkey("return")
+        js_get_count_script = (
+            "var countElem=document.querySelector('#subscriber-count, .yt-core-attributed-string, [aria-label*=\"subscribers\"]');"
+            "var cleanCount=countElem?countElem.textContent.replace(/[^0-9.KM]/g,'').trim():'Not Found';"
+            "copy(cleanCount);"  # <-- JavaScript sends the data to your system clipboard
+        )
+        pyperclip.copy(js_get_count_script)
         pg.hotkey("command", "v")
+        pg.hotkey("return",interval=0.1)
+        pg.hotkey("command","option","j",interval=0.1)
+        subcount = pyperclip.paste()
+        if subcount != None:
+            subs.configure(text="You were the " + str(subcount) + " subscriber of the channel " + str(channel) + "!")
+        time.sleep(0.1)
+        if auto_close.get() == True:
+            pg.hotkey("command","shift","w",interval=0.1)
     else:
-        pyperclip.copy(js_click_script_notify)
-        pg.hotkey("command", "v")
-    pg.hotkey("return")
-    js_get_count_script = (
-        "var countElem=document.querySelector('#subscriber-count, .yt-core-attributed-string, [aria-label*=\"subscribers\"]');"
-        "var cleanCount=countElem?countElem.textContent.replace(/[^0-9.KM]/g,'').trim():'Not Found';"
-        "copy(cleanCount);"  # <-- JavaScript sends the data to your system clipboard
-    )
-    pyperclip.copy(js_get_count_script)
-    pg.hotkey("command", "v")
-    pg.hotkey("return",interval=0.1)
-    pg.hotkey("command","option","j",interval=0.1)
-    subcount = pyperclip.paste()
-    if subcount != None:
-        subs.configure(text="You were the " + str(subcount) + " subscriber of the channel " + str(channel) + "!")
-    if auto_close.get() == True:
-        pg.hotkey("command","shift","w",interval=0.1)
+        channel = line_edit.get()
+        pg.moveTo(0,0)
+         
+        pg.click()
+
+        pg.hotkey("command","space", interval=0.1)
+
+        pg.typewrite("chrome")
+
+        pg.hotkey("return",interval=0.1)
         
+        pg.hotkey("command", "t", interval=0.1)
+        pyperclip.copy("youtube.com/@" + str(channel))
+        pg.hotkey("command", "v")
+
+        pg.hotkey("return",interval=0.1)
+        pg.hotkey("command", "option", "j", interval=0.1)
+        js_click_script = (
+            "var b=Array.from(document.querySelectorAll('button,span,yt-formatted-string'))"
+            ".find(e=>['Subscribe','Subscribed'].includes(e.textContent.trim()));if(b)b.click();"
+        )
+        js_click_script_notify = (
+        "var s=Array.from(document.querySelectorAll('button,span,yt-formatted-string')).find(e=>['Subscribe','Subscribed'].includes(e.textContent.trim()));if(s){s.click();setTimeout(()=>{var a=Array.from(document.querySelectorAll('ytd-menu-service-item-renderer,tp-yt-paper-item,span')).find(e=>e.textContent.trim()==='All');if(a)a.click();},400);}"
+        )
+
+
+        if notify_on == False:
+            pyperclip.copy(js_click_script)
+            pg.hotkey("command", "v")
+        else:
+            pyperclip.copy(js_click_script_notify)
+            pg.hotkey("command", "v")
+        pg.hotkey("return")
+        js_get_count_script = (
+            "var countElem=document.querySelector('#subscriber-count, .yt-core-attributed-string, [aria-label*=\"subscribers\"]');"
+            "var cleanCount=countElem?countElem.textContent.replace(/[^0-9.KM]/g,'').trim():'Not Found';"
+            "copy(cleanCount);"  # <-- JavaScript sends the data to your system clipboard
+        )
+        pyperclip.copy(js_get_count_script)
+        pg.hotkey("command", "v")
+        pg.hotkey("return",interval=0.1)
+        pg.hotkey("command","option","j",interval=0.1)
+        subcount = pyperclip.paste()
+        if subcount != None:
+            subs.configure(text="You were the " + str(subcount) + " subscriber of the channel " + str(channel) + "!")
+        time.sleep(0.1)
+        if auto_close.get() == True:
+            pg.hotkey("command","shift","w",interval=0.1)
+    
 root = tk.CTk()
 root.title = "Auto Subscriber"
 root.geometry("600x400")
@@ -87,4 +138,7 @@ dark_mode.pack(pady=(10,0))
 auto_close = tk.BooleanVar()
 autoclose = tk.CTkCheckBox(root,text="Auto Close Tab ",variable=auto_close)
 autoclose.pack(pady=(10,0))
+mutiple_channels = tk.BooleanVar()
+mutiplechannels = tk.CTkCheckBox(root,text="Multi Channels  ",variable=mutiple_channels)
+mutiplechannels.pack(pady=(10,0))
 root.mainloop()
