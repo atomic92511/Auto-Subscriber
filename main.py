@@ -25,8 +25,8 @@ def youtube():
     pg.hotkey("return",interval=0.1)
 
     pg.hotkey("command", "t", interval=0.1)
-
-    pg.typewrite("youtube.com/@" + str(channel))
+    pyperclip.copy("youtube.com/@" + str(channel))
+    pg.hotkey("command", "v")
 
     pg.hotkey("return",interval=0.1)
     pg.hotkey("command", "option", "j", interval=0.1)
@@ -40,16 +40,19 @@ def youtube():
 
 
     if notify_on == False:
-        pg.typewrite(js_click_script)
+        pyperclip.copy(js_click_script)
+        pg.hotkey("command", "v")
     else:
-        pg.typewrite(js_click_script_notify)
+        pyperclip.copy(js_click_script_notify)
+        pg.hotkey("command", "v")
     pg.hotkey("return")
     js_get_count_script = (
         "var countElem=document.querySelector('#subscriber-count, .yt-core-attributed-string, [aria-label*=\"subscribers\"]');"
         "var cleanCount=countElem?countElem.textContent.replace(/[^0-9.KM]/g,'').trim():'Not Found';"
         "copy(cleanCount);"  # <-- JavaScript sends the data to your system clipboard
     )
-    pg.typewrite(js_get_count_script)
+    pyperclip.copy(js_get_count_script)
+    pg.hotkey("command", "v")
     pg.hotkey("return",interval=0.1)
     pg.hotkey("command","option","j",interval=0.1)
     subcount = pyperclip.paste()
